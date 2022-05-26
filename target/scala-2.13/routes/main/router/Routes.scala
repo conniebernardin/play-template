@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Thu May 26 11:48:53 BST 2022
+// @DATE:Thu May 26 14:43:35 BST 2022
 
 package router
 
@@ -46,6 +46,10 @@ class Routes(
     ("""GET""", this.prefix, """controllers.HomeController.index()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/""", """controllers.ApplicationController.index"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """create/""", """controllers.ApplicationController.create"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """read/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.read(id:String)"""),
+    ("""PUT""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """update/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.update(id:String)"""),
+    ("""DELETE""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """delete/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.delete(id:String)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
     case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
@@ -107,6 +111,78 @@ class Routes(
     )
   )
 
+  // @LINE:9
+  private[this] lazy val controllers_ApplicationController_create3_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("create/")))
+  )
+  private[this] lazy val controllers_ApplicationController_create3_invoker = createInvoker(
+    ApplicationController_0.create,
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ApplicationController",
+      "create",
+      Nil,
+      "POST",
+      this.prefix + """create/""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:10
+  private[this] lazy val controllers_ApplicationController_read4_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("read/"), DynamicPart("id", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_ApplicationController_read4_invoker = createInvoker(
+    ApplicationController_0.read(fakeValue[String]),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ApplicationController",
+      "read",
+      Seq(classOf[String]),
+      "GET",
+      this.prefix + """read/""" + "$" + """id<[^/]+>""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:11
+  private[this] lazy val controllers_ApplicationController_update5_route = Route("PUT",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("update/"), DynamicPart("id", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_ApplicationController_update5_invoker = createInvoker(
+    ApplicationController_0.update(fakeValue[String]),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ApplicationController",
+      "update",
+      Seq(classOf[String]),
+      "PUT",
+      this.prefix + """update/""" + "$" + """id<[^/]+>""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:12
+  private[this] lazy val controllers_ApplicationController_delete6_route = Route("DELETE",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("delete/"), DynamicPart("id", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_ApplicationController_delete6_invoker = createInvoker(
+    ApplicationController_0.delete(fakeValue[String]),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ApplicationController",
+      "delete",
+      Seq(classOf[String]),
+      "DELETE",
+      this.prefix + """delete/""" + "$" + """id<[^/]+>""",
+      """""",
+      Seq()
+    )
+  )
+
 
   def routes: PartialFunction[RequestHeader, Handler] = {
   
@@ -126,6 +202,30 @@ class Routes(
     case controllers_ApplicationController_index2_route(params@_) =>
       call { 
         controllers_ApplicationController_index2_invoker.call(ApplicationController_0.index)
+      }
+  
+    // @LINE:9
+    case controllers_ApplicationController_create3_route(params@_) =>
+      call { 
+        controllers_ApplicationController_create3_invoker.call(ApplicationController_0.create)
+      }
+  
+    // @LINE:10
+    case controllers_ApplicationController_read4_route(params@_) =>
+      call(params.fromPath[String]("id", None)) { (id) =>
+        controllers_ApplicationController_read4_invoker.call(ApplicationController_0.read(id))
+      }
+  
+    // @LINE:11
+    case controllers_ApplicationController_update5_route(params@_) =>
+      call(params.fromPath[String]("id", None)) { (id) =>
+        controllers_ApplicationController_update5_invoker.call(ApplicationController_0.update(id))
+      }
+  
+    // @LINE:12
+    case controllers_ApplicationController_delete6_route(params@_) =>
+      call(params.fromPath[String]("id", None)) { (id) =>
+        controllers_ApplicationController_delete6_invoker.call(ApplicationController_0.delete(id))
       }
   }
 }

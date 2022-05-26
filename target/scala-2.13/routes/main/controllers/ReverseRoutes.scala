@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Thu May 26 11:48:53 BST 2022
+// @DATE:Thu May 26 14:43:35 BST 2022
 
 import play.api.mvc.Call
 
@@ -16,6 +16,30 @@ package controllers {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:10
+    def read(id:String): Call = {
+      
+      Call("GET", _prefix + { _defaultPrefix } + "read/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)))
+    }
+  
+    // @LINE:9
+    def create(): Call = {
+      
+      Call("POST", _prefix + { _defaultPrefix } + "create/")
+    }
+  
+    // @LINE:12
+    def delete(id:String): Call = {
+      
+      Call("DELETE", _prefix + { _defaultPrefix } + "delete/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)))
+    }
+  
+    // @LINE:11
+    def update(id:String): Call = {
+      
+      Call("PUT", _prefix + { _defaultPrefix } + "update/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)))
+    }
   
     // @LINE:7
     def index(): Call = {

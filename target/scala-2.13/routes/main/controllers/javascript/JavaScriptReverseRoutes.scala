@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Thu May 26 11:48:53 BST 2022
+// @DATE:Thu May 26 14:43:35 BST 2022
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -17,6 +17,46 @@ package controllers.javascript {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:10
+    def read: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.read",
+      """
+        function(id0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "read/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("id", id0))})
+        }
+      """
+    )
+  
+    // @LINE:9
+    def create: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.create",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "create/"})
+        }
+      """
+    )
+  
+    // @LINE:12
+    def delete: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.delete",
+      """
+        function(id0) {
+          return _wA({method:"DELETE", url:"""" + _prefix + { _defaultPrefix } + """" + "delete/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("id", id0))})
+        }
+      """
+    )
+  
+    // @LINE:11
+    def update: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.update",
+      """
+        function(id0) {
+          return _wA({method:"PUT", url:"""" + _prefix + { _defaultPrefix } + """" + "update/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("id", id0))})
+        }
+      """
+    )
   
     // @LINE:7
     def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
