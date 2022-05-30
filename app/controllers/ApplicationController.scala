@@ -16,8 +16,14 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
   def create() = TODO
-  def read(id: String) = TODO
+
+  def read(id: String): Action[AnyContent] = Action.async { implicit request =>
+  val book = dataRepository.read(id)
+  book.map(items => Json. toJson(items)).map(result => Ok(result))
+  }
+
   def update(id: String) = TODO
+
   def delete(id: String) = TODO
 
 }
