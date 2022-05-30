@@ -24,6 +24,9 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def update(id: String) = TODO
 
-  def delete(id: String) = TODO
+  def delete(id: String): Action[AnyContent] = Action { implicit request =>
+    val book = dataRepository.delete(id)
+    Accepted
+  }
 
 }
