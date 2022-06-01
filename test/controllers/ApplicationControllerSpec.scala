@@ -25,14 +25,15 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     100
   )
 
-//  "ApplicationController .index" should {
-//
-//    val result = TestApplicationController.index()(FakeRequest())
-//
-//    "return TODO" in {
-//      status(result) shouldBe Status.NOT_IMPLEMENTED
-//    }
-//  }
+  "ApplicationController .index" should {
+    beforeEach()
+    val result = TestApplicationController.index()(FakeRequest())
+
+    "return TODO" in {
+      status(result) shouldBe Status.OK
+    }
+    afterEach()
+  }
 
   "ApplicationController .create" should {
 

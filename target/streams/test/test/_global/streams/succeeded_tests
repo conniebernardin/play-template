@@ -1,3 +1,4 @@
 #Successful Tests
-#Wed Jun 01 08:46:04 BST 2022
-controllers.HomeControllerSpec=1654069563553
+#Wed Jun 01 08:48:14 BST 2022
+controllers.HomeControllerSpec=1654069694121
+controllers.ApplicationControllerSpec=1654069693593

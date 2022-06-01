@@ -55,4 +55,8 @@ class DataRepository @Inject()(
 
   def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ()) //Hint: needed for tests
 
+
+
+
+  val book: DataModel = DataModel("id1", "Frankenstein", "Mary Shelley", 200_000)
 }
