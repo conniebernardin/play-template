@@ -5,7 +5,7 @@ import models.DataModel
 import play.api.test.FakeRequest
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, Result}
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
 
 import scala.concurrent.Future
@@ -63,7 +63,7 @@ beforeEach()
 
       val createdResult: Future[Result] = TestApplicationController.create()(request)
 
-      val readResult: Future[Result] = TestApplicationController.read("abcd")(FakeRequest()) // works without having readRequest
+      val readResult: Future[Result] = TestApplicationController.read("abcd")(FakeRequest())
 
       status(createdResult) shouldBe Status.CREATED
       status(readResult) shouldBe Status.OK
@@ -90,6 +90,18 @@ beforeEach()
   }
 
   "ApplicationController .delete()" should {
+    beforeEach()
+    "find a book in the database by id and delete the all fields" in {
+      val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
+      val deleteRequest: Request[AnyContentAsEmpty.type ] = buildDelete("/api/:id")
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
+      val deleteResult: Future[Result] = TestApplicationController.delete("abcd")(deleteRequest)
+
+      status(createdResult) shouldBe Status.CREATED
+      status(deleteResult) shouldBe Status.ACCEPTED
+
+    }
+    afterEach()
 
   }
 
