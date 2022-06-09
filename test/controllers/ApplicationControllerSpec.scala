@@ -25,6 +25,13 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     100
   )
 
+  private val updatedDataModel: DataModel = DataModel(
+    "abcd",
+    "updated test name",
+    "test description",
+    100
+  )
+
   "ApplicationController .index" should {
     beforeEach()
     val result = TestApplicationController.index()(FakeRequest())
@@ -36,7 +43,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   }
 
   "ApplicationController .create" should {
-
+beforeEach()
     "create a book in the database" in {
 
       val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
@@ -44,6 +51,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       status(createdResult) shouldBe Status.CREATED
     }
+    afterEach()
   }
 
 
@@ -54,7 +62,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
 
       val createdResult: Future[Result] = TestApplicationController.create()(request)
-     
+
       val readResult: Future[Result] = TestApplicationController.read("abcd")(FakeRequest()) // works without having readRequest
 
       status(createdResult) shouldBe Status.CREATED
@@ -66,7 +74,19 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   }
 
   "ApplicationController .update()" should {
+    beforeEach()
+    "find a book in the database by id and update the fields" in {
 
+      val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
+      val updateRequest: FakeRequest[JsValue] = buildPut("/api/update/:id").withBody[JsValue](Json.toJson(updatedDataModel))
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
+      val updateResult: Future[Result] = TestApplicationController.update("abcd")(updateRequest)
+
+      status(createdResult) shouldBe Status.CREATED
+      status(updateResult) shouldBe Status.ACCEPTED
+
+    }
+    afterEach()
   }
 
   "ApplicationController .delete()" should {
