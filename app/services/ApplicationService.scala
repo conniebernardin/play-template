@@ -2,8 +2,6 @@ package services
 
 import connectors.LibraryConnector
 import models.DataModel
-
-import java.awt.print.Book
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
