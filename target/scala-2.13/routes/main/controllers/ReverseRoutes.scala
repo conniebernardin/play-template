@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Thu May 26 14:43:35 BST 2022
+// @DATE:Fri Jun 10 14:03:05 BST 2022
 
 import play.api.mvc.Call
 
@@ -26,7 +26,7 @@ package controllers {
     // @LINE:9
     def create(): Call = {
       
-      Call("POST", _prefix + { _defaultPrefix } + "create/")
+      Call("POST", _prefix + { _defaultPrefix } + "api/create")
     }
   
     // @LINE:12

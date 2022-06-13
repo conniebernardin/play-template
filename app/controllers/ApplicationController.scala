@@ -24,8 +24,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
-    val book = dataRepository.read(id)
-    book.map(items => Json.toJson(items)).map(result => Ok(result))
+   dataRepository.read(id).map(items => Json.toJson(items)).map(result => Ok(result))
   }
 
   def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>

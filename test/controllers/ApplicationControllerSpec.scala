@@ -70,9 +70,9 @@ beforeEach()
 
 
   "ApplicationController .read()" should {
-    beforeEach()
-    "find a book in the database by id" in {
 
+    "find a book in the database by id" in {
+      beforeEach()
       val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
 
       val createdResult: Future[Result] = TestApplicationController.create()(request)
@@ -82,10 +82,19 @@ beforeEach()
       status(createdResult) shouldBe Status.CREATED
       status(readResult) shouldBe Status.OK
       contentAsJson(readResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
-
+      afterEach()
     }
-    afterEach()
-  }
+
+
+//  "cannot find a book in the database as id does not exist" in {
+//    beforeEach()
+//    val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/5")
+//    val readResult: Future[Result] = TestApplicationController.read("5")(readRequest)
+//
+//    status(readResult) shouldBe Status.BAD_REQUEST
+//    afterEach()
+//  }
+}
 
   "ApplicationController .update()" should {
     beforeEach()
@@ -101,6 +110,20 @@ beforeEach()
 
     }
     afterEach()
+  }
+
+  "ApplicationController .update()" should {
+
+    "throw an error if book is updated in wrong format" in {
+
+    beforeEach()
+    val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
+
+    val updateResult = TestApplicationController.update("4")(updateRequest)
+
+    status(updateResult) shouldBe Status.BAD_REQUEST
+    afterEach()
+    }
   }
 
   "ApplicationController .delete()" should {

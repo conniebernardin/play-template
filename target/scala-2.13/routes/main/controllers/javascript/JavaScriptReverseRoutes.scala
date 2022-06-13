@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Thu May 26 14:43:35 BST 2022
+// @DATE:Fri Jun 10 14:03:05 BST 2022
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -33,7 +33,7 @@ package controllers.javascript {
       "controllers.ApplicationController.create",
       """
         function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "create/"})
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/create"})
         }
       """
     )
