@@ -1,6 +1,6 @@
 package repositories
 
-import models.DataModel
+import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.empty
 import org.mongodb.scala.model._
@@ -35,11 +35,14 @@ class DataRepository @Inject()(
       Filters.equal("_id", id)
     )
 
-  def read(id: String): Future[DataModel] =
+  def read(id: String): Future[Either[APIError, DataModel]] = {
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>
-        Future(data)
+        Future(Right(data))
+     case _ =>
+       Future(Left(APIError.BadAPIResponse(404, "Could not read book")))
     }
+  }
 
   def update(id: String, book: DataModel): Future[result.UpdateResult] =
     collection.replaceOne(

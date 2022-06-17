@@ -3,13 +3,13 @@ import models.{APIError, DataModel}
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import repositories.DataRepository
-import services.LibraryService
+import services.{ApplicationService, LibraryService}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, blocking}
 
 @Singleton
-class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val dataRepository: DataRepository, val service: LibraryService)(implicit val ec: ExecutionContext) extends BaseController {
+class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val dataRepository: DataRepository, val service: LibraryService, val applicationService: ApplicationService)(implicit val ec: ExecutionContext) extends BaseController {
 
   def index(): Action[AnyContent] = Action.async { implicit request =>
     val books: Future[Seq[DataModel]] = dataRepository.collection.find().toFuture()
@@ -25,8 +25,8 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
-   dataRepository.read(id).map{
-     case Right (book: DataModel) => OK(Json.toJson(book))
+  applicationService.read(id).map{
+     case Right (book: DataModel) => Ok(DataModel.formats.writes(book))
      case Left(error) => BadRequest
    }
   }

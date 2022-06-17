@@ -16,7 +16,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   val TestApplicationController = new ApplicationController(
     component,
     repository,
-    service
+    service,
+    applicationService
   )
 
   private val dataModel: DataModel = DataModel(
