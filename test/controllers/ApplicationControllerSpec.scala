@@ -76,13 +76,12 @@ beforeEach()
     "find a book in the database by id" in {
       beforeEach()
       val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
-
+      val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/abcd")
       val createdResult: Future[Result] = TestApplicationController.create()(request)
-
-      val readResult: Future[Result] = TestApplicationController.read("abcd")(FakeRequest())
+      val readResult: Future[Result] = TestApplicationController.read("abcd")(readRequest)
 
       status(createdResult) shouldBe Status.CREATED
-      status(readResult) shouldBe Status.OK
+      status(readResult) shouldBe (Status.OK)
       contentAsJson(readResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
       afterEach()
     }
