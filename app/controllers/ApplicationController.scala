@@ -26,8 +26,8 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
   applicationService.read(id).map{
-     case Right (book: DataModel) => Ok(DataModel.formats.writes(book))
-     case Left(error) => BadRequest
+     case Right (book: DataModel) => Ok(DataModel.formats.writes(book)) //wrapped in right
+     case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason)) //returns 500 and reason wrapped in left
    }
   }
 

@@ -40,7 +40,7 @@ class DataRepository @Inject()(
       case Some(data) =>
         Future(Right(data))
      case _ =>
-       Future(Left(APIError.BadAPIResponse(404, "Could not read book")))
+       Future(Left(APIError.BadAPIResponse(400, "Could not read book")))
     }
   }
 
