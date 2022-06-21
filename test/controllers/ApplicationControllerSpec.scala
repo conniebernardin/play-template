@@ -45,8 +45,6 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   }
 
 
-
-
   "ApplicationController .create" should {
 beforeEach()
     "create a book in the database" in {
@@ -86,10 +84,10 @@ beforeEach()
       afterEach()
     }
 
-    "throw 500 error if book cannot be found" in {
+    "throw 500 error if book cannot be found by id in database" in {
       beforeEach()
-      val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/5")
-          val readResult: Future[Result] = TestApplicationController.read("5")(readRequest)
+      val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/abc")
+          val readResult: Future[Result] = TestApplicationController.read("abc")(readRequest)
 
           status(readResult) shouldBe Status.INTERNAL_SERVER_ERROR
           afterEach()
@@ -110,8 +108,6 @@ beforeEach()
       status(updateResult) shouldBe Status.ACCEPTED
       afterEach()
     }
-
-
   }
 
   "ApplicationController .update()" should {
