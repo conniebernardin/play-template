@@ -17,10 +17,9 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    request.body.validate[DataModel] match {
-      case JsSuccess(dataModel, _) =>
-        dataRepository.create(dataModel).map(_ => Created)
-      case JsError(_) => Future(BadRequest)
+    applicationService.create().map {
+      case Right(book: DataModel) => Created
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
   }
 
@@ -40,8 +39,10 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
     def delete(id: String): Action[AnyContent] = Action.async { implicit request =>
-      dataRepository.delete(id)
-      Future(Accepted)
+      applicationService.delete(id).map{
+        case Right(message) => Accepted
+        case Left(error) => Status(error.httpResponseStatus)
+      }
     }
 
   def getGoogleBook(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>

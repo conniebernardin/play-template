@@ -1,6 +1,8 @@
 package services
 
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import models.{APIError, DataModel}
+import play.api.mvc.Results.Status
 import repositories.DataRepository
 
 import javax.inject.{Inject, Singleton}
@@ -12,6 +14,18 @@ class ApplicationService @Inject() (val dataRepository: DataRepository)(implicit
   def read(id: String): Future[Either[APIError, DataModel]] =
     dataRepository.read(id).map{
       case Right(book: DataModel) => Right(book)
-      case Left(errors) => Left(APIError.BadAPIResponse(404, "Could not find book"))
+      case Left(error) => Left(APIError.BadAPIResponse(404, "Could not find book"))
+    }
+
+  def create(): Future[Either[APIError, DataModel]] =
+    dataRepository.create().map{
+        case Right(book: DataModel) => Right(book)
+        case Left(error) => Left(APIError.BadAPIResponse(404, "Could not create book"))
+    }
+
+  def delete(id: String): Future[Either[APIError, String]] =
+    dataRepository.delete(id).map{
+      case Right(message) => Right("Book successfully deleted")
+      case Left(error) => Left(APIError.BadAPIResponse(404, "Could not delete book"))
     }
 }

@@ -46,26 +46,30 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
 
   "ApplicationController .create" should {
-beforeEach()
+
     "create a book in the database" in {
+
+      beforeEach()
 
       val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
       val createdResult: Future[Result] = TestApplicationController.create()(request)
 
       status(createdResult) shouldBe Status.CREATED
-    }
-    afterEach()
-  }
 
-  "ApplicationController .create" should {
-    beforeEach()
-    val request = buildPost("/api/create").withBody[JsValue](Json.obj())
-    val createdResult = TestApplicationController.create()(request)
-
-    "throw error when creating a book in database with the wrong format" in {
-      status(createdResult) shouldBe Status.BAD_REQUEST
+      afterEach()
     }
-    afterEach()
+
+//    "throw error when creating a book in database with the wrong format" in {
+//
+//      beforeEach()
+//
+//      val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.obj())
+//      val createdResult: Future[Result] = TestApplicationController.create()(request)
+//      status(createdResult) shouldBe Status.BAD_REQUEST
+//      contentAsJson(createdResult)(defaultAwaitTimeout) shouldBe Json.toJson("book could not be created")
+//
+//      afterEach()
+//    }
   }
 
 
@@ -125,8 +129,9 @@ beforeEach()
   }
 
   "ApplicationController .delete()" should {
-    beforeEach()
+
     "find a book in the database by id and delete the all fields" in {
+      beforeEach()
       val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
       val deleteRequest: Request[AnyContentAsEmpty.type ] = buildDelete("/api/:id")
       val createdResult: Future[Result] = TestApplicationController.create()(request)
@@ -134,9 +139,18 @@ beforeEach()
 
       status(createdResult) shouldBe Status.CREATED
       status(deleteResult) shouldBe Status.ACCEPTED
-
+      afterEach()
     }
-    afterEach()
+
+    "throw error if book with Id does not exist" in {
+      beforeEach()
+      val deleteRequest: FakeRequest[AnyContentAsEmpty.type] = buildDelete("/api/abc")
+      val deleteResult: Future[Result] = TestApplicationController.delete("abc")(deleteRequest)
+
+      status(deleteResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      afterEach()
+    }
+
 
   }
 

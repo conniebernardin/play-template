@@ -1,15 +1,21 @@
 package repositories
 
+import com.mongodb.client.result.DeleteResult
 import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model.Filters.empty
+import org.mongodb.scala.model.Filters.{empty, equal}
+import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
+import play.api.libs.json.JsValue
+import play.libs.Json
 import org.mongodb.scala.result
+import org.mongodb.scala.result.InsertOneResult
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util
 
 @Singleton
 class DataRepository @Inject()(
@@ -24,11 +30,14 @@ class DataRepository @Inject()(
   replaceIndexes = false
 ) {
 
-  def create(book: DataModel): Future[DataModel] =
+  def create(): Future[Either[APIError, DataModel]] =
     collection
       .insertOne(book)
-      .toFuture()
-      .map(_ => book)
+      .toFutureOption()
+      .map{
+          case Some(value) if value.wasAcknowledged() => Right(book)
+          case _ => Left(APIError.BadAPIResponse(400, "book could not be created"))
+      }
 
   private def byID(id: String): Bson =
     Filters.and(
@@ -51,10 +60,13 @@ class DataRepository @Inject()(
       options = new ReplaceOptions().upsert(true) //What happens when we set this to false?
     ).toFuture()
 
-  def delete(id: String): Future[result.DeleteResult] =
+  def delete(id: String): Future[Either[APIError, String]] =
     collection.deleteOne(
       filter = byID(id)
-    ).toFuture()
+    ).toFutureOption().map{
+      case Some(value) if value.getDeletedCount == 1 => Right("Book successfully deleted")
+      case _ => Left(APIError.BadAPIResponse(400, "Could not delete book"))
+    }
 
   def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ()) //Hint: needed for tests
 
