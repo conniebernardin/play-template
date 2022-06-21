@@ -28,4 +28,10 @@ class ApplicationService @Inject() (val dataRepository: DataRepository)(implicit
       case Right(message) => Right("Book successfully deleted")
       case Left(error) => Left(APIError.BadAPIResponse(404, "Could not delete book"))
     }
+
+  def update(id: String, book: DataModel): Future[Either[APIError, DataModel]] =
+    dataRepository.update(id, book).map{
+      case Right(book:DataModel) => Right(book)
+      case Left(error) => Left(APIError.BadAPIResponse(404, "Could not update book"))
+    }
 }

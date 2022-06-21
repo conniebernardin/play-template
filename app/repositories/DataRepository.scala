@@ -53,12 +53,15 @@ class DataRepository @Inject()(
     }
   }
 
-  def update(id: String, book: DataModel): Future[result.UpdateResult] =
+  def update(id: String, book: DataModel): Future[Either[APIError, DataModel]] =
     collection.replaceOne(
       filter = byID(id),
       replacement = book,
       options = new ReplaceOptions().upsert(true) //What happens when we set this to false?
-    ).toFuture()
+    ).toFutureOption().map {
+      case Some(value) if value.wasAcknowledged() => Right(book)
+      case _ => Left(APIError.BadAPIResponse(400, "book could not be updated"))
+    }
 
   def delete(id: String): Future[Either[APIError, String]] =
     collection.deleteOne(
