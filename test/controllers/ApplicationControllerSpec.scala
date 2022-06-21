@@ -86,21 +86,21 @@ beforeEach()
       afterEach()
     }
 
+    "throw 500 error if book cannot be found" in {
+      beforeEach()
+      val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/5")
+          val readResult: Future[Result] = TestApplicationController.read("5")(readRequest)
 
-//  "cannot find a book in the database as id does not exist" in {
-//    beforeEach()
-//    val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/5")
-//    val readResult: Future[Result] = TestApplicationController.read("5")(readRequest)
-//
-//    status(readResult) shouldBe Status.BAD_REQUEST
-//    afterEach()
-//  }
-}
+          status(readResult) shouldBe Status.INTERNAL_SERVER_ERROR
+          afterEach()
+    }
+  }
+
 
   "ApplicationController .update()" should {
-    beforeEach()
-    "find a book in the database by id and update the fields" in {
 
+    "find a book in the database by id and update the fields" in {
+      beforeEach()
       val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
       val updateRequest: FakeRequest[JsValue] = buildPut("/api/update/:id").withBody[JsValue](Json.toJson(updatedDataModel))
       val createdResult: Future[Result] = TestApplicationController.create()(request)
@@ -108,9 +108,10 @@ beforeEach()
 
       status(createdResult) shouldBe Status.CREATED
       status(updateResult) shouldBe Status.ACCEPTED
-
+      afterEach()
     }
-    afterEach()
+
+
   }
 
   "ApplicationController .update()" should {
