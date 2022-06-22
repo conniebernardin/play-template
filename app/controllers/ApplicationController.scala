@@ -30,6 +30,13 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
    }
   }
 
+  def readByName(name: String): Action[AnyContent] = Action.async { implicit request =>
+    applicationService.readByName(name).map{
+      case Right(book: DataModel) => Ok(DataModel.formats.writes(book))
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
+    }
+  }
+
   def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.update(id, request).map {
       case Right(book: DataModel) => Accepted(Json.toJson(book))

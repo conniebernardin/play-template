@@ -114,20 +114,20 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     }
   }
 
-//
-//  "ApplicationController .update()" should {
-//
-//    "throw an error if book is updated in wrong format" in {
-//
-//    beforeEach()
-//    val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
-//
-//    val updateResult = TestApplicationController.update("4")(updateRequest)
-//
-//    status(updateResult) shouldBe Status.BAD_REQUEST
-//    afterEach()
-//    }
-//  }
+
+  "ApplicationController .update()" should {
+
+    "throw an error if book is updated in wrong format" in {
+
+    beforeEach()
+    val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
+
+    val updateResult = TestApplicationController.update("4")(updateRequest)
+
+    status(updateResult) shouldBe Status.INTERNAL_SERVER_ERROR
+    afterEach()
+    }
+  }
 
   "ApplicationController .delete()" should {
 

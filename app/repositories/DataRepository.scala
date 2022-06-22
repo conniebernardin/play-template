@@ -44,6 +44,20 @@ class DataRepository @Inject()(
       Filters.equal("_id", id)
     )
 
+  private def byName(name: String): Bson =
+    Filters.and(
+      Filters.equal("name", name)
+    )
+
+  def readByName(name: String): Future[Either[APIError, DataModel]] = {
+    collection.find(byName(name)).headOption() flatMap{
+      case Some(data) =>
+        Future(Right(data))
+      case _ =>
+        Future(Left(APIError.BadAPIResponse(400, "could not find book name")))
+    }
+  }
+
   def read(id: String): Future[Either[APIError, DataModel]] = {
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>

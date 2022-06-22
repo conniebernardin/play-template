@@ -20,6 +20,12 @@ class ApplicationService @Inject() (val dataRepository: DataRepository)(implicit
       case Left(error) => Left(APIError.BadAPIResponse(404, "Could not find book"))
     }
 
+  def readByName(name: String): Future[Either[APIError, DataModel]] =
+    dataRepository.readByName(name).map{
+      case Right(book: DataModel) => Right(book)
+      case Left(error) => Left(APIError.BadAPIResponse(404, "Could not find book name"))
+    }
+
   def create(input: Request[JsValue]): Future[Either[APIError, DataModel]] =
     input.body.validate[DataModel] match {
       case JsSuccess(value, _) => dataRepository.create(value)
