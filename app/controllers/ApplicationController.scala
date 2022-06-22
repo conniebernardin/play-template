@@ -17,8 +17,8 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    applicationService.create().map {
-      case Right(book: DataModel) => Created
+    applicationService.create(request).map {
+      case Right(book: DataModel) => Created(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
   }
@@ -30,8 +30,8 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
    }
   }
 
-  def update(id: String, book: DataModel): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    applicationService.update(id, book).map {
+  def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
+    applicationService.update(id, request).map {
       case Right(book: DataModel) => Accepted(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }

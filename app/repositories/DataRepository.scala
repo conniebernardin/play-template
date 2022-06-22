@@ -30,7 +30,7 @@ class DataRepository @Inject()(
   replaceIndexes = false
 ) {
 
-  def create(): Future[Either[APIError, DataModel]] =
+  def create(book: DataModel): Future[Either[APIError, DataModel]] =
     collection
       .insertOne(book)
       .toFutureOption()
@@ -53,11 +53,11 @@ class DataRepository @Inject()(
     }
   }
 
-  def update(id: String, book: DataModel): Future[Either[APIError, DataModel]] =
+  def update(id: String): Future[Either[APIError, DataModel]] =
     collection.replaceOne(
       filter = byID(id),
       replacement = book,
-      options = new ReplaceOptions().upsert(true) //What happens when we set this to false?
+      options = new ReplaceOptions().upsert(true)
     ).toFutureOption().map {
       case Some(value) if value.wasAcknowledged() => Right(book)
       case _ => Left(APIError.BadAPIResponse(400, "book could not be updated"))
@@ -76,5 +76,5 @@ class DataRepository @Inject()(
 
 
 
-  val book: DataModel = DataModel("id1", "Frankenstein", "Mary Shelley", 200_000)
+  val book: DataModel = DataModel("abcd", "Frankenstein", "Mary Shelley", 200_000)
 }
