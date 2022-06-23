@@ -6,10 +6,6 @@ import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.{empty, equal}
 import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
-import play.api.libs.json.JsValue
-import play.libs.Json
-import org.mongodb.scala.result
-import org.mongodb.scala.result.InsertOneResult
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
@@ -76,6 +72,14 @@ class DataRepository @Inject()(
       case Some(value) if value.wasAcknowledged() => Right(book)
       case _ => Left(APIError.BadAPIResponse(400, "book could not be updated"))
     }
+
+  def updateField(id:String, field: String, updatedValue: String): Future[Option[DataModel]] = {
+    collection.findOneAndUpdate(
+      equal("_id", id),
+      set(field, updatedValue),
+      options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+    ).toFutureOption()
+  }
 
   def delete(id: String): Future[Either[APIError, String]] =
     collection.deleteOne(

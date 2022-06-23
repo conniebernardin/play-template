@@ -1,5 +1,6 @@
 package controllers
 import models.{APIError, DataModel}
+import play.api.libs.json.JsLookupResult.PathMissing.error
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import repositories.DataRepository
@@ -41,6 +42,13 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
     applicationService.update(id, request).map {
       case Right(book: DataModel) => Accepted(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
+    }
+  }
+
+  def updateField(id: String, field: String, updatedValue: String): Action[JsValue] = Action.async(parse.json) {implicit request =>
+    applicationService.updateField(id, field, updatedValue).map{
+      case Right(updatedBook: DataModel) => Accepted(Json.toJson(updatedBook))
+      case Left(error) => Status(error.httpResponseStatus)
     }
   }
 
