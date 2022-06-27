@@ -6,6 +6,7 @@ import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.{empty, equal}
 import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
@@ -14,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util
 
 @Singleton
-class DataRepository @Inject()(
+class DataRepository @Inject() (
                                 mongoComponent: MongoComponent
                               )(implicit ec: ExecutionContext) extends PlayMongoRepository[DataModel](
   collectionName = "dataModels",
@@ -24,7 +25,7 @@ class DataRepository @Inject()(
     Indexes.ascending("_id")
   )),
   replaceIndexes = false
-) {
+) with RepositoryTrait {
 
   def create(book: DataModel): Future[Either[APIError, DataModel]] =
     collection
@@ -92,7 +93,14 @@ class DataRepository @Inject()(
   def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ())
 
 
-
-
   val book: DataModel = DataModel("abcd", "Frankenstein", "Mary Shelley", 200_000)
+}
+
+trait RepositoryTrait {
+  def create(book: DataModel): Future[Either[APIError, DataModel]]
+  def read(id: String): Future[Either[APIError, DataModel]]
+  def readByName(name: String): Future[Either[APIError, DataModel]]
+  def update(id: String): Future[Either[APIError, DataModel]]
+  def updateField(id: String, field: String, updatedValue: String): Future[Option[DataModel]]
+  def delete(id: String): Future[Either[APIError, String]]
 }
