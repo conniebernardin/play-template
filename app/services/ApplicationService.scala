@@ -46,7 +46,7 @@ class ApplicationService @Inject() (val dataRepository: DataRepository)(implicit
 
   def updateField(id: String, field: String, updatedValue: String):  Future[Either[APIError, DataModel]] =
     dataRepository.updateField(id, field, updatedValue).map {
-      case (updatedBook: DataModel) => Right(updatedBook)
+      case Some(updatedBook: DataModel) => Right(updatedBook)
       case _ => Left(APIError.BadAPIResponse(400, "could not update"))
           }
 }

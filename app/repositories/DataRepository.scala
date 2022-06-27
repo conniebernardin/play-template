@@ -73,7 +73,7 @@ class DataRepository @Inject()(
       case _ => Left(APIError.BadAPIResponse(400, "book could not be updated"))
     }
 
-  def updateField(id:String, field: String, updatedValue: String): Future[Option[DataModel]] = {
+  def updateField(id: String, field: String, updatedValue: String): Future[Option[DataModel]] = {
     collection.findOneAndUpdate(
       equal("_id", id),
       set(field, updatedValue),
@@ -89,7 +89,7 @@ class DataRepository @Inject()(
       case _ => Left(APIError.BadAPIResponse(400, "Could not delete book"))
     }
 
-  def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ()) //Hint: needed for tests
+  def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ())
 
 
 

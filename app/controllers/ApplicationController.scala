@@ -1,6 +1,5 @@
 package controllers
 import models.{APIError, DataModel}
-import play.api.libs.json.JsLookupResult.PathMissing.error
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import repositories.DataRepository

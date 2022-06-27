@@ -6,7 +6,7 @@ import play.api.test.FakeRequest
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, Result}
-import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
+import play.api.test.Helpers.{await, contentAsJson, defaultAwaitTimeout, status}
 
 import scala.concurrent.Future
 import scala.reflect.internal.NoPhase
@@ -30,6 +30,13 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   private val updatedDataModel: DataModel = DataModel(
     "abcd",
     "updated test name",
+    "test description",
+    100
+  )
+
+  private val updatedField: DataModel = DataModel(
+    "abcd",
+    "updated field test",
     "test description",
     100
   )
@@ -126,6 +133,22 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
     status(updateResult) shouldBe Status.INTERNAL_SERVER_ERROR
     afterEach()
+    }
+  }
+
+  "ApplicationController .updateField" should {
+    "find a book in the database and update ONE field" in {
+      beforeEach()
+      val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
+      val updateFieldRequest: FakeRequest[JsValue] = buildPut("/api/updateField/:id").withBody[JsValue](Json.toJson("abcd"))
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
+      val updatedFieldResult: Future[Result] = TestApplicationController.updateField("abcd", "name", "updated field test")(updateFieldRequest)
+
+      await(updatedFieldResult)
+      status(createdResult) shouldBe Status.CREATED
+      status(updatedFieldResult) shouldBe Status.ACCEPTED
+      contentAsJson(updatedFieldResult)(defaultAwaitTimeout).as[JsValue] shouldBe Json.toJson(updatedField)
+      afterEach()
     }
   }
 
