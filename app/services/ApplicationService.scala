@@ -5,14 +5,14 @@ import models.{APIError, DataModel}
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
 import play.api.mvc.Request
 import play.api.mvc.Results.Status
-import repositories.DataRepository
+import repositories.{DataRepository, MockRepositoryTrait}
 import views.html.helper.input
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ApplicationService @Inject() (val dataRepository: DataRepository)(implicit val ec: ExecutionContext) {
+class ApplicationService @Inject()(val dataRepository: MockRepositoryTrait)(implicit val ec: ExecutionContext) {
 
   def read(id: String): Future[Either[APIError, DataModel]] =
     dataRepository.read(id).map{

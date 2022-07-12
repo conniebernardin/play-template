@@ -1,5 +1,6 @@
 package repositories
 
+import com.google.inject.ImplementedBy
 import com.mongodb.client.result.DeleteResult
 import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
@@ -14,6 +15,17 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util
 
+@ImplementedBy(classOf[DataRepository])
+trait MockRepositoryTrait {
+  def create(book: DataModel): Future[Either[APIError, DataModel]]
+  def read(id: String): Future[Either[APIError, DataModel]]
+  def readByName(name: String): Future[Either[APIError, DataModel]]
+  def update(id: String): Future[Either[APIError, DataModel]]
+  def updateField(id: String, field: String, updatedValue: String): Future[Option[DataModel]]
+  def delete(id: String): Future[Either[APIError, String]]
+}
+
+
 @Singleton
 class DataRepository @Inject() (
                                 mongoComponent: MongoComponent
@@ -25,7 +37,7 @@ class DataRepository @Inject() (
     Indexes.ascending("_id")
   )),
   replaceIndexes = false
-) with RepositoryTrait {
+) with MockRepositoryTrait {
 
   def create(book: DataModel): Future[Either[APIError, DataModel]] =
     collection
@@ -96,11 +108,3 @@ class DataRepository @Inject() (
   val book: DataModel = DataModel("abcd", "Frankenstein", "Mary Shelley", 200_000)
 }
 
-trait RepositoryTrait {
-  def create(book: DataModel): Future[Either[APIError, DataModel]]
-  def read(id: String): Future[Either[APIError, DataModel]]
-  def readByName(name: String): Future[Either[APIError, DataModel]]
-  def update(id: String): Future[Either[APIError, DataModel]]
-  def updateField(id: String, field: String, updatedValue: String): Future[Option[DataModel]]
-  def delete(id: String): Future[Either[APIError, String]]
-}
