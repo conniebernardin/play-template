@@ -1,7 +1,7 @@
 package services
 
 import baseSpec.{BaseSpec, BaseSpecWithApplication}
-import models.DataModel
+import models.{APIError, DataModel}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -44,9 +44,22 @@ import scala.concurrent.{ExecutionContext, Future}
       }
       afterEach()
     }
+      "return a left of an APIerror" in{
+        beforeEach()
+        (mockedDataRepo.read(_: String))
+          .expects(id)
+          .returning(Future(Left(APIError.BadAPIResponse(404, "Could not find book"))))
 
-     def beforeEach(): Unit = repository.deleteAll()
-     def afterEach(): Unit = repository.deleteAll()
+        whenReady(applicationServiceTest.read(id)) {result =>
+          result shouldBe Left(APIError.BadAPIResponse(404,"Could not find book"))
+        }
+      }
+      afterEach()
+
+
+
 
   }
+   override def beforeEach(): Unit = repository.deleteAll()
+   override def afterEach(): Unit = repository.deleteAll()
 }
