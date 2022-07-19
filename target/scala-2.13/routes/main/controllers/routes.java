@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Mon Jun 13 15:19:31 BST 2022
+// @DATE:Tue Jul 19 13:01:33 BST 2022
 
 package controllers;
 

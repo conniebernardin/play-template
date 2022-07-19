@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Mon Jun 13 15:19:31 BST 2022
+// @DATE:Tue Jul 19 13:01:33 BST 2022
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -43,12 +43,26 @@ package controllers.javascript {
       "controllers.ApplicationController.getGoogleBook",
       """
         function(search0,term1) {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "library/google/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("search", search0)) + "/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("term", term1))})
+        
+          if (true) {
+            return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "library/google/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("search", search0)) + "/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("term", term1))})
+          }
+        
         }
       """
     )
   
     // @LINE:12
+    def updateField: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.updateField",
+      """
+        function(id0,field1,updatedValue2) {
+          return _wA({method:"PUT", url:"""" + _prefix + { _defaultPrefix } + """" + "updateField/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("id", id0)) + _qS([(""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("field", field1), (""" + implicitly[play.api.mvc.QueryStringBindable[String]].javascriptUnbind + """)("updatedValue", updatedValue2)])})
+        }
+      """
+    )
+  
+    // @LINE:13
     def delete: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.ApplicationController.delete",
       """

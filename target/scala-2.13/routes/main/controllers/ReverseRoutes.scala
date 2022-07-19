@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/connie.bernardin/PlayFramework_tasks/play-template/conf/routes
-// @DATE:Mon Jun 13 15:19:31 BST 2022
+// @DATE:Tue Jul 19 13:01:33 BST 2022
 
 import play.api.mvc.Call
 
@@ -31,11 +31,25 @@ package controllers {
   
     // @LINE:14
     def getGoogleBook(search:String, term:String): Call = {
+    
+      (search: @unchecked, term: @unchecked) match {
       
-      Call("GET", _prefix + { _defaultPrefix } + "library/google/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("search", search)) + "/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("term", term)))
+        // @LINE:14
+        case (search, term)  =>
+          
+          Call("GET", _prefix + { _defaultPrefix } + "library/google/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("search", search)) + "/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("term", term)))
+      
+      }
+    
     }
   
     // @LINE:12
+    def updateField(id:String, field:String, updatedValue:String): Call = {
+      
+      Call("PUT", _prefix + { _defaultPrefix } + "updateField/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)) + play.core.routing.queryString(List(Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("field", field)), Some(implicitly[play.api.mvc.QueryStringBindable[String]].unbind("updatedValue", updatedValue)))))
+    }
+  
+    // @LINE:13
     def delete(id:String): Call = {
       
       Call("DELETE", _prefix + { _defaultPrefix } + "delete/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)))
