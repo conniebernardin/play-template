@@ -7,12 +7,12 @@ object BookModel {
   implicit val formats: Format[BookModel] = Json.format[BookModel]
 }
 
-case class volumeInfo(title: String, description: String, pageCount: Int)
-object volumeInfo{
-  implicit val formats: Format[volumeInfo] = Json.format[volumeInfo]
+case class VolumeInfo(title: String, description: String, pageCount: Int)
+object VolumeInfo{
+  implicit val formats: Format[VolumeInfo] = Json.format[VolumeInfo]
 }
 
-case class Item(id: String, volumeInfo:volumeInfo){
+case class Item(id: String, volumeInfo:VolumeInfo){
 }
 object Item{
   implicit val formats: Format[Item] = Json.format[Item]
